@@ -15,6 +15,7 @@
 #' @importFrom dplyr filter select
 #' @importFrom tidyr  %>%
 #' @seealso \code{\link[clusterProfiler]{enricher}}; \code{\link[clusterProfiler]{GSEA}}
+#' @details More about MsigDB & GSEA: \url{http://software.broadinstitute.org/gsea/msigdb/index.jsp}
 #' @author Weibin Huang<\email{654751191@@qq.com}>
 #' @examples
 #' data(geneList, package = "DOSE")
@@ -52,6 +53,7 @@ FastMS <- function(genes,
     ## FastMS pipeline
     #devtools::install_github("ToledoEM/msigdf")
     data("msigdf.human",package = "msigdf",envir = environment())
+    data("msigdf.annot",package = "lucky",envir = environment()) # load("E:/@Analysis/test/enrichment/msigdf.annot.rda")
 
     ## 产生储存文件夹
     old <- options()
@@ -137,6 +139,9 @@ FastMS <- function(genes,
 
       ## save result
       result.i <- as.data.frame(msObject)
+      # annotation
+      result.i$Description <- convert(result.i$ID,"Standard name","Brief description",msigdf.annot)
+      result.i$FullDescription <- convert(result.i$ID,"Standard name","Full description or abstract",msigdf.annot)
       result.i.path <- str_c(dir,names,"_",msType,"_Molecular Signatures enrichment.csv")
       write.csv(result.i,result.i.path)
 
@@ -153,7 +158,11 @@ FastMS <- function(genes,
                    verbose = F)
       MS.GSEA <- c(MS.GSEA,list(gsea))
       names(MS.GSEA)[i] <- msType
+
+      # annotation
       result.gsea <- as.data.frame(gsea)
+      result.gsea$Description <- convert(result.gsea$ID,"Standard name","Brief description",msigdf.annot)
+      result.gsea$FullDescription <- convert(result.gsea$ID,"Standard name","Full description or abstract",msigdf.annot)
       write.csv(result.gsea,str_c(dir,names,"_",msType,"_Molecular Signatures GSEA analysis.csv"))
 
       ## gsea plot report
@@ -181,15 +190,7 @@ FastMS <- function(genes,
     save(MS,file = paste0(dir,"Molecular signature.rda"))
     LuckyVerbose("More about MsigDB & GSEA: ");LuckyVerbose("http://software.broadinstitute.org/gsea/msigdb/index.jsp")
     return(MS)
-}
-
-
-
-
-
-
-
-
+  }
 
   }
 

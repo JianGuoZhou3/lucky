@@ -174,7 +174,7 @@ mine_part <- function(data,
   return(newdata)
 }
 
-## repeat-finder
+## repeat-finder. Also use in FastCorrelation
 find.repeat <- function(vt,var=c("Var1","Var2")){
   vt1 <- sort(vt[var])
   vt2 <- paste(vt1,collapse = "_")

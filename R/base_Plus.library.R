@@ -7,12 +7,9 @@
 #'Automatically install and library package
 #'@description A fast way for Chinese people to automatically install and library package.
 #'@param packages a string vector of package names
-#'
 #'@author Weibin Huang\email{654751191@@qq.com}
-#'
 #'@examples
 #'Plus.library(c("DT","RColorBrewer","stringr"))
-#'
 #'@export
 Plus.library <- function(packages){
   ## 系统已经安装的包

@@ -41,22 +41,20 @@ FastCorrelation <- function(data,
   }
 
   ## Create pair matrix
-  pm <- as.data.frame(t(combn(colnames(data),2)),stringsAsFactors = F) # str(pm)
-  colnames(pm) <- c("Var1","Var2")
   if(is.null(control.markers)){
     LuckyVerbose("Calculate all pairs...")
-    pm2 <- pm
+    pm2 <- as.data.frame(t(combn(colnames(data),2)),stringsAsFactors = F) # str(pm)
+    colnames(pm) <- c("Var1","Var2")
   } else {
-
-    LuckyVerbose("Calculate specified pairs...")
-
-    if(is.null(target.markers)){
-      tm <- setdiff(colnames(data),control.markers)
-    } else {
-      tm <- target.markers
+    pm <- NULL
+    for(i in 1:length(control.markers)){ # i=1
+      c.i <- control.markers[i]
+      o.i <- setdiff(colnames(data),c.i)
+      pm.i <- data.frame(Var1=c.i,Var2=o.i)
+      pm <- rbind(pm,pm.i)
     }
-
-    pm2 <- dplyr::filter(pm,Var1 %in% control.markers,Var2 %in% tm)
+    test.r <- apply(pm,1,find.repeat)
+    pm2 <- pm[!duplicated(test.r),]
   }
   pm2 <- as.matrix(pm2)
 
