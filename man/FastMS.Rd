@@ -31,6 +31,9 @@ FastMS(genes, geneList, default.universe = T, pAdjustMethod = "BH",
 \description{
 Fast Molecular Signatures Analysis via clusterProfilter
 }
+\details{
+More about MsigDB & GSEA: \url{http://software.broadinstitute.org/gsea/msigdb/index.jsp}
+}
 \examples{
 data(geneList, package = "DOSE")
 genes = names(geneList)[1:100]

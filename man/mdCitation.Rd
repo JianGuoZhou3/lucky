@@ -30,7 +30,7 @@ a list
 For .md files,when given specified reference form(.csl), citation library(.bib), \code{mardownCitation} product a .bat file to annotate the citations of .md by pandoc.
 }
 \details{
-1. The path should be a absolute path instead of relative one. \cr 2. You have to install pandoc before. More detailed installation please go to \url{https://github.com/jgm/pandoc/releases/tag/2.7.3}
+1. The path should be a absolute path instead of relative one. \cr 2. You have to install pandoc before. More detailed installation please go to \url{https://github.com/jgm/pandoc/releases/tag/2.7.3} \cr 3.It seems that only "docx" is available by pandoc-citeproc filter
 }
 \examples{
 cit <- mdCitation()

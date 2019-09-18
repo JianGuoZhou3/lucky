@@ -14,7 +14,6 @@ A fast way for Chinese people to automatically install and library package.
 }
 \examples{
 Plus.library(c("DT","RColorBrewer","stringr"))
-
 }
 \author{
 Weibin Huang\email{654751191@qq.com}
