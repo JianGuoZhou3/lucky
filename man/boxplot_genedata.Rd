@@ -8,8 +8,9 @@ boxplot_genedata(select.genes, design, expr.matrix, convert = T,
   type = c("facet", "normal")[1], contrast = "N.status",
   contrast.list = c("N0", "Np"), genes.levels = NULL, palette = NULL,
   point.alpha = 0.5, box.alpha = 1, method = "wilcox.test",
-  x.title = NULL, y.title = NULL, legend.position = c(0.9, 0.9),
-  cut = F, ncut = 2, width = 12, height = 10, names = "love")
+  map_signif_level = T, x.title = NULL, y.title = NULL,
+  legend.position = c(0.9, 0.9), cut = F, ncut = 2, width = 12,
+  height = 10, names = "test")
 }
 \arguments{
 \item{select.genes}{the genes you want to plot}
@@ -36,6 +37,8 @@ boxplot_genedata(select.genes, design, expr.matrix, convert = T,
 
 \item{method}{the method of P value for comparision.Default is "wilcox.test".See also \code{method} of \code{\link[ggpubr]{compare_means}} function.}
 
+\item{map_signif_level}{boolean value, if the p-value are directly written as annotation or asterisks are used instead. Alternatively one can provide a named numeric vector to create custom mappings from p-values to annotation: For example: c("***"=0.001, "**"=0.01, "*"=0.05)}
+
 \item{x.title}{the names of x axis of plot}
 
 \item{y.title}{the names of y axis of plot}
@@ -52,9 +55,6 @@ boxplot_genedata(select.genes, design, expr.matrix, convert = T,
 }
 \description{
 boxplot_genedata provide fast way to draw boxplot for gene expression based on gene expression matrix and design object
-}
-\details{
-the names of genes shold be Ensembl id.
 }
 \examples{
 library(lucky)
@@ -83,7 +83,7 @@ print(p$plot)
 View(p$metadata)
 }
 \seealso{
-\code{\link[ggpubr]{compare_means}}
+\code{\link[ggsignif]{geom_signif}}
 }
 \author{
 Weibin Huang<\email{654751191@qq.com}>

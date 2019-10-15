@@ -18,6 +18,9 @@ Fast way to use import for a new package
 \details{
 1. The package must be managed via \code{\link[roxygen2]{roxygen2-package}}; \cr 2. The package import relationship must be updated via \code{\link[roxygen2]{roxygenise}}
 }
+\note{
+before use \code{importPackage()}, you have to run \code{roxygen2::roxygenise()} before in order to gather correct package usage from this new package.
+}
 \examples{
 # If you are in the space of a new package, just
 importPackage()

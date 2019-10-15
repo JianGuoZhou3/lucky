@@ -23,8 +23,11 @@
 #' @param width the width of plot
 #' @param height the height of plot
 #' @param names part name of the saved plot
-#' @details the names of genes shold be Ensembl id.
-#' @seealso \code{\link[ggpubr]{compare_means}}
+#' @param map_signif_level boolean value, if the p-value are directly written as annotation or asterisks are used instead. Alternatively one can provide a named numeric vector to create custom mappings from p-values to annotation: For example: c("***"=0.001, "**"=0.01, "*"=0.05)
+#' @importFrom ggplot2 ggplot geom_boxplot aes geom_point scale_fill_manual labs facet_wrap theme_bw theme element_text element_rect
+#' @importFrom ggpubr rotate_x_text
+#' @importFrom ggsignif geom_signif
+#' @seealso \code{\link[ggsignif]{geom_signif}}
 #' @author Weibin Huang<\email{654751191@@qq.com}>
 #' @examples
 #' library(lucky)
@@ -63,14 +66,15 @@ boxplot_genedata <- function(select.genes,
                              palette=NULL,
                              point.alpha = 0.5,box.alpha = 1,
                              method = "wilcox.test",
+                             map_signif_level = T,
                              x.title=NULL,
                              y.title=NULL,
                              legend.position=c(0.9,0.9),
                              cut = F,ncut = 2,
                              width = 12,height = 10,
-                             names = "love"){
+                             names = "test"){
   ## 原始函数
-  boxplot.x <- function(select.genes,
+  boxplot_x <- function(select.genes,
                         design,
                         expr.matrix,
                         convert = T,
@@ -79,15 +83,16 @@ boxplot_genedata <- function(select.genes,
                         contrast.list = c("N0","Np"),
                         genes.levels = NULL,
                         palette=NULL,
-                        point.alpha = 0.5,box.alpha = 1,
+                        point.alpha = 0.5,
+                        box.alpha = 1,
                         method = "wilcox.test",
+                        map_signif_level = T,
                         x.title=NULL,
                         y.title=NULL,
                         legend.position="right",
                         print = T){
     ## 加载包
-    nd <- c("ggplot2","ggpubr")
-    Plus.library(nd)
+    #nd <- c("ggplot2","ggpubr");Plus.library(nd)
 
     ## 生成boxplot.data
     expr.matrix <- expr.matrix[,rownames(design)]
@@ -133,7 +138,10 @@ boxplot_genedata <- function(select.genes,
       #不进行比较
       compare <- NULL
     } else {
-      compare <- stat_compare_means(comparisons = list(contrast.list),label = "p.signif",method = method)
+      # compare <- stat_compare_means(comparisons = list(contrast.list),label = "p.signif",method = method)
+      compare <- geom_signif(comparisons = list(c(contrast.list)),
+                             test = method,
+                             map_signif_level = map_signif_level)
     }
 
     ## 颜色
@@ -152,9 +160,9 @@ boxplot_genedata <- function(select.genes,
     if(type == "facet"){
       x1 <- x
       colnames(x1)[match(contrast,colnames(x1))] <- "condition"
-      p <- ggplot(x1,aes(x=condition,y=expr,fill=symbols)) +
-        geom_boxplot(color="black", outlier.shape = NA) +
-        geom_point(position = "jitter") +
+      p <- ggplot(x1,aes(x=condition,y=expr)) +
+        geom_boxplot(aes(fill=symbols),color="black", outlier.shape = NA) +
+        geom_point(position = "jitter",alpha = point.alpha) +
         scale_fill_manual(values = palette1) +
         labs(x = x.t,y = y.t) +
         facet_wrap(. ~ symbols,scales="free") +
@@ -201,7 +209,7 @@ boxplot_genedata <- function(select.genes,
 
   ## cut的应用
   if(cut == F){
-    a <- boxplot.x(select.genes = select.genes,
+    a <- boxplot_x(select.genes = select.genes,
                   design = design,
                   expr.matrix = expr.matrix,
                   convert = convert,
@@ -213,6 +221,7 @@ boxplot_genedata <- function(select.genes,
                   point.alpha = point.alpha,
                   box.alpha = box.alpha,
                   method = method,
+                  map_signif_level = map_signif_level,
                   x.title=x.title,
                   y.title=y.title,
                   print=T)
@@ -224,7 +233,7 @@ boxplot_genedata <- function(select.genes,
     pdf(paste0(names,"_boxplot_multiple cut.pdf"),width,height)
     for(i in 1:length(l1)){ #i =1
       s.i <- l1[[i]];s.i <- select.genes[s.i]
-      a <- boxplot.x(select.genes = s.i,
+      a <- boxplot_x(select.genes = s.i,
                      design = design,
                      expr.matrix = expr.matrix,
                      convert = convert,
@@ -236,6 +245,7 @@ boxplot_genedata <- function(select.genes,
                      point.alpha = point.alpha,
                      box.alpha = box.alpha,
                      method = method,
+                     map_signif_level = map_signif_level,
                      x.title=x.title,
                      y.title=y.title,
                      print=F)
@@ -246,7 +256,7 @@ boxplot_genedata <- function(select.genes,
   }
 }
 
-
+## practice
 if(F){
   ggboxplot(x,
             x = contrast, y = "expr",

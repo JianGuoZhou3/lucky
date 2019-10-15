@@ -44,7 +44,7 @@ FastCorrelation <- function(data,
   if(is.null(control.markers)){
     LuckyVerbose("Calculate all pairs...")
     pm2 <- as.data.frame(t(combn(colnames(data),2)),stringsAsFactors = F) # str(pm)
-    colnames(pm) <- c("Var1","Var2")
+    colnames(pm2) <- c("Var1","Var2")
   } else {
     pm <- NULL
     for(i in 1:length(control.markers)){ # i=1
@@ -65,7 +65,7 @@ FastCorrelation <- function(data,
                       method = "pearson",
                       alternative = "two.sided"){
 
-    ## select a subset of data
+    # select a subset of data
     x <- as.numeric(data[,marker.a])
     y <- as.numeric(data[,marker.b])
 
